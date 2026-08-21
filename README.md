@@ -1,14 +1,15 @@
-# Qutsn
+# Hi 👋
 
-<sub>ROUGENUAGE / ROAD · SCREEN · ORBIT</sub>
+I enjoy the wind rushing past me on road-racing rides.
 
-我享受骑着公路车时迎面而来的风。闲暇时，我会玩电子游戏、看电影，也乐于参与开源项目。<br>
-视线越过地平线，我也始终对天空之外的事物保持好奇。
+In my downtime, I play video games and watch films. I also enjoy contributing to open-source projects and learning from the people who build them.
 
-<sub>Chasing the wind on road rides; spending quieter hours with games, films, open source, and whatever lies beyond the sky.</sub>
+I am curious about what lies beyond the sky, from lunar cycles to the wider universe.
 
-<br>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Qutsn/Qutsn/main/assets/lunar-status-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Qutsn/Qutsn/main/assets/lunar-status-light.svg">
+  <img alt="Current lunar phase and illumination" src="./assets/lunar-status-light.svg" width="980">
+</picture>
 
-![Current lunar phase and illumination](./assets/lunar-status.svg)
-
-<sub>CELESTIAL STATUS / UPDATED DAILY IN UTC / APPROXIMATE GEOCENTRIC MODEL</sub>
+<sub>CELESTIAL STATUS / REFRESHES DAILY AT 00:00 GMT (UTC) / APPROXIMATE GEOCENTRIC MODEL</sub>
