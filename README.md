@@ -1,16 +1,10 @@
-# Hello!
+# Hi 👋
 
-I'm Qutsn 👋, I'm passionate about technology, video games, and films.
+I enjoy the wind rushing past me on road-racing rides.
 
-Enjoy exploring open source projects, learning from the people who build them, and contributing whenever I can.
+In my downtime, I play video games and watch films. I also enjoy contributing to open-source projects and learning from the people who build them.
 
-Believe the best way to understand something is to explore, experiment, and learn from others.
-
-----
-
-🌙 Tracking the phases of the moon, one cycle at a time.
-
-    Hoping that with every full moon, we find a fuller life.
+I am curious about what lies beyond the sky, from lunar cycles to the wider universe.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Qutsn/Qutsn/main/assets/lunar-status-dark.svg">
@@ -18,4 +12,4 @@ Believe the best way to understand something is to explore, experiment, and lear
   <img alt="Current lunar phase and illumination" src="./assets/lunar-status-light.svg" width="980">
 </picture>
 
-<sub>CELESTIAL STATUS / REFRESHES DAILY AT 00:00 GMT (UTC) / APPROXIMATE GEOCENTRIC MODEL</sub>
+<sub>CELESTIAL STATUS / REFRESHES DAILY / APPROXIMATE GEOCENTRIC MODEL</sub>
