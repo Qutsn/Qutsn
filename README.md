@@ -1,8 +1,6 @@
 # Hello!
 
-I'm Qutsn 👋
-
-I'm passionate about technology, video games, and films.
+I'm Qutsn 👋, I'm passionate about technology, video games, and films.
 
 Enjoy exploring open source projects, learning from the people who build them, and contributing whenever I can.
 
