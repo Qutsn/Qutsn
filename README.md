@@ -1,12 +1,12 @@
-# Hi 👋
+# Hello!
 
-Hi, I'm Qutsn 👋
+I'm Qutsn 👋
 
 I'm passionate about technology, video games, and films.
 
-I enjoy exploring open source projects, learning from the people who build them, and contributing whenever I can.
+Enjoy exploring open source projects, learning from the people who build them, and contributing whenever I can.
 
-I believe the best way to understand something is to explore, experiment, and learn from others.
+Believe the best way to understand something is to explore, experiment, and learn from others.
 
 ----
 
