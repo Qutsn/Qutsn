@@ -4,7 +4,7 @@ import test from "node:test";
 import {
   phaseAt,
   renderSvg,
-  utcNoon,
+  utcMidnight,
 } from "../scripts/generate-lunar-card.mjs";
 
 test("phase model stays within physical bounds", () => {
@@ -34,12 +34,12 @@ test("known 2024 lunar events land near their expected phases", () => {
 });
 
 test("UTC date parsing rejects impossible dates", () => {
-  assert.equal(utcNoon("2026-08-21").toISOString(), "2026-08-21T12:00:00.000Z");
-  assert.throws(() => utcNoon("2026-02-30"), /Invalid calendar date/);
-  assert.throws(() => utcNoon("21-08-2026"), /YYYY-MM-DD/);
+  assert.equal(utcMidnight("2026-08-21").toISOString(), "2026-08-21T00:00:00.000Z");
+  assert.throws(() => utcMidnight("2026-02-30"), /Invalid calendar date/);
+  assert.throws(() => utcMidnight("21-08-2026"), /YYYY-MM-DD/);
 });
 
-test("SVG output is deterministic, self-contained, and finite", () => {
+test("SVG output is deterministic, transparent, self-contained, and finite", () => {
   const first = renderSvg("2026-08-21");
   const second = renderSvg("2026-08-21");
 
@@ -47,7 +47,25 @@ test("SVG output is deterministic, self-contained, and finite", () => {
   assert.match(first, /^<svg/);
   assert.match(first, /<title id="title">/);
   assert.match(first, /2026-08-21/);
-  assert.match(first, /WAXING GIBBOUS/);
+  assert.match(first, /FIRST QUARTER/);
+  assert.match(first, /00:00 GMT/);
+  assert.doesNotMatch(first, /[㐀-鿿]/);
+  assert.doesNotMatch(first, /<rect\b[^>]*(?:width="980"|height="320")/i);
   assert.doesNotMatch(first, /<script|foreignObject|\shref=|\son[a-z]+=/i);
+  assert.doesNotMatch(first, /(?:href|xlink:href)=['"]https?:\/\//i);
   assert.doesNotMatch(first, /NaN|Infinity|undefined/);
+});
+
+test("light and dark themes are both renderable and structurally aligned", () => {
+  const light = renderSvg("2026-08-21", undefined, "light");
+  const dark = renderSvg("2026-08-21", undefined, "dark");
+
+  assert.match(light, /00:00 GMT/);
+  assert.match(dark, /00:00 GMT/);
+  assert.doesNotMatch(light, /[㐀-鿿]/);
+  assert.doesNotMatch(dark, /[㐀-鿿]/);
+  assert.notEqual(light, dark);
+  assert.equal((light.match(/<path/g) ?? []).length, (dark.match(/<path/g) ?? []).length);
+  assert.doesNotMatch(light, /<rect\b[^>]*(?:width="980"|height="320")/i);
+  assert.doesNotMatch(dark, /<rect\b[^>]*(?:width="980"|height="320")/i);
 });
