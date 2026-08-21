@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="280" viewBox="0 0 860 280" role="img" aria-labelledby="title desc">
+  <title id="title">Current lunar phase: WAXING GIBBOUS</title>
+  <desc id="desc">63% illuminated on 2026-08-21 at 12:00 UTC; approximate geocentric model.</desc>
+  <rect width="860" height="280" fill="#F04A37"/>
+  <path d="M12 0H830L860 30V280H12Z" fill="#0A0D0C"/>
+  <path d="M12 1H829L859 31V279H12Z" fill="none" stroke="#303632" stroke-width="2"/>
+  <path d="M263 0V280M278 0V280" stroke="#202622" stroke-width="1"/>
+  <rect x="263" y="0" width="15" height="42" fill="#F04A37"/>
+  <rect x="817" y="24" width="18" height="18" fill="#C8F53A"/>
+  <rect x="805" y="48" width="30" height="4" fill="#53C8C1"/>
+
+  <circle cx="142" cy="132" r="91" fill="none" stroke="#303632" stroke-width="1"/>
+  <line x1="142.00" y1="30.00" x2="142.00" y2="24.00" stroke="#47504A" stroke-width="2"/>
+    <line x1="214.12" y1="59.88" x2="218.37" y2="55.63" stroke="#47504A" stroke-width="2"/>
+    <line x1="244.00" y1="132.00" x2="250.00" y2="132.00" stroke="#47504A" stroke-width="2"/>
+    <line x1="214.12" y1="204.12" x2="221.90" y2="211.90" stroke="#C8F53A" stroke-width="4"/>
+    <line x1="142.00" y1="234.00" x2="142.00" y2="240.00" stroke="#47504A" stroke-width="2"/>
+    <line x1="69.88" y1="204.12" x2="65.63" y2="208.37" stroke="#47504A" stroke-width="2"/>
+    <line x1="40.00" y1="132.00" x2="34.00" y2="132.00" stroke="#47504A" stroke-width="2"/>
+    <line x1="69.88" y1="59.88" x2="65.63" y2="55.63" stroke="#47504A" stroke-width="2"/>
+  <circle cx="142" cy="132" r="72" fill="#171C19"/>
+  <path d="M142.00 60.00 L156.62 61.50 L162.57 63.00 L167.05 64.50 L170.77 66.00 L174.00 67.50 L176.86 69.00 L179.44 70.50 L181.80 72.00 L183.97 73.50 L185.99 75.00 L187.87 76.50 L189.62 78.00 L191.27 79.50 L192.82 81.00 L194.29 82.50 L195.67 84.00 L196.97 85.50 L198.20 87.00 L199.37 88.50 L200.48 90.00 L201.53 91.50 L202.52 93.00 L203.46 94.50 L204.35 96.00 L205.20 97.50 L205.99 99.00 L206.74 100.50 L207.45 102.00 L208.12 103.50 L208.75 105.00 L209.33 106.50 L209.88 108.00 L210.39 109.50 L210.87 111.00 L211.31 112.50 L211.71 114.00 L212.08 115.50 L212.42 117.00 L212.72 118.50 L212.99 120.00 L213.23 121.50 L213.44 123.00 L213.61 124.50 L213.75 126.00 L213.86 127.50 L213.94 129.00 L213.98 130.50 L214.00 132.00 L213.98 133.50 L213.94 135.00 L213.86 136.50 L213.75 138.00 L213.61 139.50 L213.44 141.00 L213.23 142.50 L212.99 144.00 L212.72 145.50 L212.42 147.00 L212.08 148.50 L211.71 150.00 L211.31 151.50 L210.87 153.00 L210.39 154.50 L209.88 156.00 L209.33 157.50 L208.75 159.00 L208.12 160.50 L207.45 162.00 L206.74 163.50 L205.99 165.00 L205.20 166.50 L204.35 168.00 L203.46 169.50 L202.52 171.00 L201.53 172.50 L200.48 174.00 L199.37 175.50 L198.20 177.00 L196.97 178.50 L195.67 180.00 L194.29 181.50 L192.82 183.00 L191.27 184.50 L189.62 186.00 L187.87 187.50 L185.99 189.00 L183.97 190.50 L181.80 192.00 L179.44 193.50 L176.86 195.00 L174.00 196.50 L170.77 198.00 L167.05 199.50 L162.57 201.00 L156.62 202.50 L142.00 204.00 L142.00 204.00 L138.17 202.50 L136.62 201.00 L135.44 199.50 L134.47 198.00 L133.63 196.50 L132.88 195.00 L132.20 193.50 L131.58 192.00 L131.01 190.50 L130.49 189.00 L130.00 187.50 L129.54 186.00 L129.10 184.50 L128.70 183.00 L128.32 181.50 L127.95 180.00 L127.61 178.50 L127.29 177.00 L126.98 175.50 L126.69 174.00 L126.42 172.50 L126.16 171.00 L125.91 169.50 L125.68 168.00 L125.46 166.50 L125.25 165.00 L125.05 163.50 L124.87 162.00 L124.69 160.50 L124.53 159.00 L124.38 157.50 L124.23 156.00 L124.10 154.50 L123.97 153.00 L123.86 151.50 L123.75 150.00 L123.66 148.50 L123.57 147.00 L123.49 145.50 L123.42 144.00 L123.36 142.50 L123.30 141.00 L123.26 139.50 L123.22 138.00 L123.19 136.50 L123.17 135.00 L123.16 133.50 L123.16 132.00 L123.16 130.50 L123.17 129.00 L123.19 127.50 L123.22 126.00 L123.26 124.50 L123.30 123.00 L123.36 121.50 L123.42 120.00 L123.49 118.50 L123.57 117.00 L123.66 115.50 L123.75 114.00 L123.86 112.50 L123.97 111.00 L124.10 109.50 L124.23 108.00 L124.38 106.50 L124.53 105.00 L124.69 103.50 L124.87 102.00 L125.05 100.50 L125.25 99.00 L125.46 97.50 L125.68 96.00 L125.91 94.50 L126.16 93.00 L126.42 91.50 L126.69 90.00 L126.98 88.50 L127.29 87.00 L127.61 85.50 L127.95 84.00 L128.32 82.50 L128.70 81.00 L129.10 79.50 L129.54 78.00 L130.00 76.50 L130.49 75.00 L131.01 73.50 L131.58 72.00 L132.20 70.50 L132.88 69.00 L133.63 67.50 L134.47 66.00 L135.44 64.50 L136.62 63.00 L138.17 61.50 L142.00 60.00 Z" fill="#C8F53A"/>
+  <circle cx="142" cy="132" r="72" fill="none" stroke="#F2F0E8" stroke-opacity="0.7" stroke-width="1.5"/>
+  <text x="40" y="250" fill="#53C8C1" font-family="ui-monospace, Consolas, monospace" font-size="12">CYCLE / 04.08</text>
+
+  <text x="300" y="38" fill="#53C8C1" font-family="ui-monospace, Consolas, monospace" font-size="13">CELESTIAL STATUS / NODE 01</text>
+  <text x="300" y="83" fill="#F2F0E8" font-family="Arial, sans-serif" font-size="30" font-weight="700">WAXING GIBBOUS</text>
+  <text x="300" y="111" fill="#C8F53A" font-family="Arial, sans-serif" font-size="17" font-weight="600">盈凸月</text>
+  <text x="799" y="72" fill="#717B74" font-family="ui-monospace, Consolas, monospace" font-size="10" text-anchor="end">UTC / 12:00</text>
+  <text x="799" y="87" fill="#717B74" font-family="ui-monospace, Consolas, monospace" font-size="10" text-anchor="end">GEOCENTRIC / APPROX.</text>
+
+  <path d="M300 132H816" stroke="#303632" stroke-width="1"/>
+  <path d="M470 145V192M640 145V192" stroke="#303632" stroke-width="1"/>
+  <text x="300" y="154" fill="#717B74" font-family="ui-monospace, Consolas, monospace" font-size="11">ILLUMINATION</text>
+  <text x="300" y="184" fill="#F2F0E8" font-family="ui-monospace, Consolas, monospace" font-size="24" font-weight="700">63%</text>
+  <text x="490" y="154" fill="#717B74" font-family="ui-monospace, Consolas, monospace" font-size="11">LUNAR AGE</text>
+  <text x="490" y="184" fill="#F2F0E8" font-family="ui-monospace, Consolas, monospace" font-size="24" font-weight="700">8.6 D</text>
+  <text x="660" y="154" fill="#717B74" font-family="ui-monospace, Consolas, monospace" font-size="11">UPDATED</text>
+  <text x="660" y="184" fill="#F2F0E8" font-family="ui-monospace, Consolas, monospace" font-size="18" font-weight="700">2026-08-21</text>
+
+  <rect x="300" y="218" width="516" height="34" fill="#171C19"/>
+  <rect x="300" y="218" width="8" height="34" fill="#C8F53A"/>
+  <text x="326" y="240" fill="#F2F0E8" font-family="ui-monospace, Consolas, monospace" font-size="12">LOOKING PAST THE HORIZON</text>
+  <text x="798" y="240" fill="#F04A37" font-family="ui-monospace, Consolas, monospace" font-size="12" text-anchor="end">ORBITAL PITLANE</text>
+</svg>
