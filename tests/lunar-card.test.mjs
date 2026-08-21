@@ -39,7 +39,7 @@ test("UTC date parsing rejects impossible dates", () => {
   assert.throws(() => utcMidnight("21-08-2026"), /YYYY-MM-DD/);
 });
 
-test("SVG output is deterministic, transparent, self-contained, and finite", () => {
+test("SVG output is deterministic, restrained, transparent, self-contained, and finite", () => {
   const first = renderSvg("2026-08-21");
   const second = renderSvg("2026-08-21");
 
@@ -48,9 +48,15 @@ test("SVG output is deterministic, transparent, self-contained, and finite", () 
   assert.match(first, /<title id="title">/);
   assert.match(first, /2026-08-21/);
   assert.match(first, /FIRST QUARTER/);
-  assert.match(first, /00:00 GMT/);
+  assert.doesNotMatch(first, /00:00 GMT/);
+  assert.match(first, /aria-label="2026-08-21 \/ UTC"/);
+  assert.match(first, /shape-rendering="crispEdges"/);
   assert.doesNotMatch(first, /[㐀-鿿]/);
-  assert.doesNotMatch(first, /<rect\b[^>]*(?:width="980"|height="320")/i);
+  assert.doesNotMatch(first, /<rect\b[^>]*(?:width="980"|height="220")/i);
+  assert.doesNotMatch(first, /<ellipse\b/i);
+  assert.doesNotMatch(first, /#(?:B3261E|FF6B58)/i);
+  assert.doesNotMatch(first, /M22 18H/);
+  assert.ok((first.match(/<text\b/g) ?? []).length <= 5);
   assert.doesNotMatch(first, /<script|foreignObject|\shref=|\son[a-z]+=/i);
   assert.doesNotMatch(first, /(?:href|xlink:href)=['"]https?:\/\//i);
   assert.doesNotMatch(first, /NaN|Infinity|undefined/);
@@ -60,12 +66,20 @@ test("light and dark themes are both renderable and structurally aligned", () =>
   const light = renderSvg("2026-08-21", undefined, "light");
   const dark = renderSvg("2026-08-21", undefined, "dark");
 
-  assert.match(light, /00:00 GMT/);
-  assert.match(dark, /00:00 GMT/);
+  assert.doesNotMatch(light, /00:00 GMT/);
+  assert.doesNotMatch(dark, /00:00 GMT/);
   assert.doesNotMatch(light, /[㐀-鿿]/);
   assert.doesNotMatch(dark, /[㐀-鿿]/);
   assert.notEqual(light, dark);
   assert.equal((light.match(/<path/g) ?? []).length, (dark.match(/<path/g) ?? []).length);
-  assert.doesNotMatch(light, /<rect\b[^>]*(?:width="980"|height="320")/i);
-  assert.doesNotMatch(dark, /<rect\b[^>]*(?:width="980"|height="320")/i);
+  assert.doesNotMatch(light, /<rect\b[^>]*(?:width="980"|height="220")/i);
+  assert.doesNotMatch(dark, /<rect\b[^>]*(?:width="980"|height="220")/i);
+  assert.doesNotMatch(light, /<ellipse\b/i);
+  assert.doesNotMatch(dark, /<ellipse\b/i);
+  assert.doesNotMatch(light, /#(?:B3261E|FF6B58)/i);
+  assert.doesNotMatch(dark, /#(?:B3261E|FF6B58)/i);
+  assert.match(light, /shape-rendering="crispEdges"/);
+  assert.match(dark, /shape-rendering="crispEdges"/);
+  assert.ok((light.match(/<text\b/g) ?? []).length <= 5);
+  assert.ok((dark.match(/<text\b/g) ?? []).length <= 5);
 });
