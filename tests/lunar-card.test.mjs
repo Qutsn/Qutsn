@@ -19,7 +19,7 @@ test("all phase names and percentage extremes produce portable SVG", () => {
     assert.ok(svg.includes('aria-label="' + Math.round(data.illumination*100) + '%"'));
     assert.doesNotMatch(svg, /NaN|Infinity|undefined|System.Windows|<script|foreignObject|<text\b|font-family|\shref=|\son[a-z]+=/i);
     assert.doesNotMatch(svg, /d="F[01]/);
-    assert.equal(svg, renderSvg("2026-11-11", data, "dark"));
+    assert.equal(svg.replaceAll("#083D85", "#B9D8F4"), renderSvg("2026-11-11", data, "dark").replaceAll("#083D85", "#B9D8F4"));
     assert.equal(svg, renderSvg("2026-11-11", data));
   }
 });
@@ -77,3 +77,12 @@ test("UTC date parsing rejects impossible dates", () => {
   assert.throws(() => utcMidnight("21-08-2026"), /YYYY-MM-DD/);
 });
 
+
+test("angled artwork has a clipped curved ring and horizontal date on a transparent canvas", () => {
+ const svg=renderSvg("2026-11-11");
+ assert.ok(svg.includes("M0 72L470 0L350 288L0 360Z"));
+ assert.ok(svg.includes('fill="#54C8FA" clip-path="url(#angular-edge)"'));
+ assert.ok(svg.includes("M0 300C99 324"));
+ assert.ok(svg.includes("translate(30.00 320.00)"));
+ assert.doesNotMatch(svg, /rotate\(|<rect[^>]+fill=/);
+});

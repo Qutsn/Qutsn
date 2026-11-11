@@ -165,26 +165,26 @@ export function renderSvg(dateString, data = phaseAt(utcMidnight(dateString)), t
   const [firstWord, secondWord] = data.phaseName.split(" ");
   const moonPath = lunarDiscPath(data.fraction, 160, 132, 82);
   const [year, month, day] = dateString.split("-");
-  // The approved blue-and-white artwork is the same on both GitHub themes.
+  // Transparent canvas blends with GitHub; small labels adapt to its theme.
   return `<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360" role="img" aria-labelledby="title desc">
 <title id="title">Current lunar phase: ${attr(data.phaseName)}</title>
 <desc id="desc">${illumination} illuminated on ${dateString} at 00:00 UTC; approximate geocentric model.</desc>
-<defs><clipPath id="frame"><rect width="980" height="360"/></clipPath></defs>
+<defs><clipPath id="angular-edge"><path d="M0 72L470 0L350 288L0 360Z"/></clipPath><clipPath id="frame"><rect width="980" height="360"/></clipPath></defs>
 <g clip-path="url(#frame)">
-<rect width="980" height="360" fill="#ffffff"/>
-<path d="M0 0H470C424 78 442 224 350 360H0Z" fill="#109EF2"/>
-<path d="M0 300C99 324 221 284 277 218C314 174 334 89 333 0H379C382 118 348 218 284 279C208 351 113 379 0 353Z" fill="#54C8FA"/>
-${outlineText("LUNAR PHASE", {x:30, y:39, size:14, style:"serif", fill:"#ffffff"})}
+
+<path d="M0 72L470 0L350 288L0 360Z" fill="#109EF2"/>
+<path d="M0 300C99 324 221 284 277 218C314 174 334 89 333 0H379C382 118 348 218 284 279C208 351 113 379 0 353Z" fill="#54C8FA" clip-path="url(#angular-edge)"/>
+${outlineText("LUNAR PHASE", {x:30, y:92, size:14, style:"serif", fill:"#ffffff"})}
 <g transform="translate(28 24) scale(1.2)">
 <circle cx="160" cy="132" r="82" fill="#0750E8"/>
 <path d="${moonPath}" fill="#ffffff"/>
 </g>
-${outlineText(day + " / " + month + " " + year + " · UTC", {x:30, y:331, size:15, style:"serif", fill:"#ffffff"})}
+${outlineText(day + " / " + month + " " + year + " · UTC", {x:30, y:320, size:15, style:"serif", fill:"#ffffff"})}
 ${outlineText(firstWord, {x:488, y:48, width:firstWord.length * 45, height:44, shadow:true})}
 ${outlineText(secondWord, {x:488, y:106, width:secondWord.length * 52.25, height:55, shadow:true})}
 ${outlineText(illumination, {x:488, y:181, width:illumination.length * 80, height:88, shadow:true})}
-${outlineText("ILLUMINATED", {x:493, y:295, size:15, fill:"#083D85"})}
-<path d="M879 360L980 259V360Z" fill="#109EF2"/>
+${outlineText("ILLUMINATED", {x:493, y:295, size:15, fill:themeName === "dark" ? "#B9D8F4" : "#083D85"})}
+<path d="M887 348L976 267L961 348Z" fill="#109EF2"/>
 </g></svg>
 `;
 }
