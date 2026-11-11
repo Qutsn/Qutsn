@@ -1,11 +1,49 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 
 import {
   phaseAt,
   renderSvg,
   utcMidnight,
 } from "../scripts/generate-lunar-card.mjs";
+
+test("all phase names and percentage extremes produce portable SVG", () => {
+  for (const fraction of [0, .125, .25, .375, .5, .625, .75, .875]) {
+    const names = ["NEW MOON","WAXING CRESCENT","FIRST QUARTER","WAXING GIBBOUS","FULL MOON","WANING GIBBOUS","LAST QUARTER","WANING CRESCENT"];
+    const phaseName = names[Math.round(fraction * 8)];
+    const data = { fraction, illumination:(1-Math.cos(2*Math.PI*fraction))/2, phaseName };
+    const svg = renderSvg("2026-11-11", data);
+    assert.match(svg, /viewBox="0 0 980 360"/);
+    assert.ok(svg.includes(phaseName));
+    assert.ok(svg.includes('aria-label="' + Math.round(data.illumination*100) + '%"'));
+    assert.doesNotMatch(svg, /NaN|Infinity|undefined|System.Windows|<script|foreignObject|<text\b|font-family|\shref=|\son[a-z]+=/i);
+    assert.doesNotMatch(svg, /d="F[01]/);
+    assert.equal(svg, renderSvg("2026-11-11", data, "dark"));
+    assert.equal(svg, renderSvg("2026-11-11", data));
+  }
+});
+
+test("date labels update including leap days and year boundaries", () => {
+  for (const date of ["2028-02-29", "2026-12-31", "2027-01-01"]) {
+    const svg = renderSvg(date);
+    const [year, month, day] = date.split("-");
+    assert.ok(svg.includes('aria-label="' + day + ' / ' + month + ' ' + year + ' · UTC"'));
+    assert.ok(svg.includes(date + " at 00:00 UTC"));
+  }
+  assert.throws(() => renderSvg("2026-11-11", undefined, "missing"), /Unknown theme/);
+});
+
+test("exported glyph outlines cover daily data", () => {
+  const atlas = JSON.parse(readFileSync(new URL("../scripts/lunar-lettering.json", import.meta.url), "utf8").replace(/^\uFEFF/, ""));
+  for (const alphabet of Object.values(atlas)) {
+    for (const glyph of Object.values(alphabet)) {
+      assert.ok(Number.isFinite(glyph.advance) && glyph.advance > 0);
+      assert.ok(glyph.bounds.every(Number.isFinite));
+      if (glyph.d) assert.match(glyph.d, /^M/);
+    }
+  }
+});
 
 test("phase model stays within physical bounds", () => {
   for (const value of [
@@ -39,47 +77,3 @@ test("UTC date parsing rejects impossible dates", () => {
   assert.throws(() => utcMidnight("21-08-2026"), /YYYY-MM-DD/);
 });
 
-test("SVG output is deterministic, restrained, transparent, self-contained, and finite", () => {
-  const first = renderSvg("2026-08-21");
-  const second = renderSvg("2026-08-21");
-
-  assert.equal(first, second);
-  assert.match(first, /^<svg/);
-  assert.match(first, /<title id="title">/);
-  assert.match(first, /2026-08-21/);
-  assert.match(first, /FIRST QUARTER/);
-  assert.doesNotMatch(first, /00:00 GMT/);
-  assert.match(first, /aria-label="2026-08-21 \/ UTC"/);
-  assert.match(first, /shape-rendering="crispEdges"/);
-  assert.doesNotMatch(first, /[㐀-鿿]/);
-  assert.doesNotMatch(first, /<rect\b[^>]*(?:width="980"|height="220")/i);
-  assert.doesNotMatch(first, /<ellipse\b/i);
-  assert.doesNotMatch(first, /#(?:B3261E|FF6B58)/i);
-  assert.doesNotMatch(first, /M22 18H/);
-  assert.ok((first.match(/<text\b/g) ?? []).length <= 5);
-  assert.doesNotMatch(first, /<script|foreignObject|\shref=|\son[a-z]+=/i);
-  assert.doesNotMatch(first, /(?:href|xlink:href)=['"]https?:\/\//i);
-  assert.doesNotMatch(first, /NaN|Infinity|undefined/);
-});
-
-test("light and dark themes are both renderable and structurally aligned", () => {
-  const light = renderSvg("2026-08-21", undefined, "light");
-  const dark = renderSvg("2026-08-21", undefined, "dark");
-
-  assert.doesNotMatch(light, /00:00 GMT/);
-  assert.doesNotMatch(dark, /00:00 GMT/);
-  assert.doesNotMatch(light, /[㐀-鿿]/);
-  assert.doesNotMatch(dark, /[㐀-鿿]/);
-  assert.notEqual(light, dark);
-  assert.equal((light.match(/<path/g) ?? []).length, (dark.match(/<path/g) ?? []).length);
-  assert.doesNotMatch(light, /<rect\b[^>]*(?:width="980"|height="220")/i);
-  assert.doesNotMatch(dark, /<rect\b[^>]*(?:width="980"|height="220")/i);
-  assert.doesNotMatch(light, /<ellipse\b/i);
-  assert.doesNotMatch(dark, /<ellipse\b/i);
-  assert.doesNotMatch(light, /#(?:B3261E|FF6B58)/i);
-  assert.doesNotMatch(dark, /#(?:B3261E|FF6B58)/i);
-  assert.match(light, /shape-rendering="crispEdges"/);
-  assert.match(dark, /shape-rendering="crispEdges"/);
-  assert.ok((light.match(/<text\b/g) ?? []).length <= 5);
-  assert.ok((dark.match(/<text\b/g) ?? []).length <= 5);
-});

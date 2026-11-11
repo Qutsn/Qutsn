@@ -1,24 +1,16 @@
-# Hello!
+Curious about how things work and how things are made.
 
-I'm Qutsn 👋
+Exploring open source, learning by building, experimenting, and contributing along the way.
 
-I'm passionate about technology, video games, and films.
+Into technology, video games, films, and the ideas behind the things we create.
 
-Enjoy exploring open source projects, learning from the people who build them, and contributing whenever I can.
+### Today's moon phase
 
-Believe the best way to understand something is to explore, experiment, and learn from others.
-
-----
-
-🌙 Tracking the phases of the moon, one cycle at a time.
-
-    Hoping that with every full moon, we find a fuller life.
-
-    
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Qutsn/Qutsn/main/assets/lunar-status-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Qutsn/Qutsn/main/assets/lunar-status-light.svg">
-  <img alt="Current lunar phase and illumination" src="./assets/lunar-status-light.svg" width="980">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/lunar-status-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/lunar-status-light.svg">
+  <img alt="Today's moon phase and illuminated fraction, calculated at 00:00 UTC" src="./assets/lunar-status.svg" width="980">
 </picture>
 
-<sub>CELESTIAL STATUS / REFRESHES DAILY / APPROXIMATE GEOCENTRIC MODEL</sub>
+<sub>Updated daily · Approximate geocentric model · 00:00 UTC</sub>
+
