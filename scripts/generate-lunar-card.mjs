@@ -165,7 +165,7 @@ ${outlineText("LUNAR PHASE", {x:30, y:92, size:14, style:"serif", fill:"#ffffff"
 <circle cx="160" cy="132" r="82" fill="#0750E8"/>
 <path d="${moonPath}" fill="#ffffff"/>
 </g>
-${outlineText(day + " / " + month + " " + year + " · " + timeLabel + " UTC", {x:30, y:300, size:15, style:"serif", fill:"#ffffff"})}
+${outlineText(day + " / " + month + " " + year + " · UTC", {x:30, y:320, size:15, style:"serif", fill:"#ffffff"})}
 ${outlineText(firstWord, {x:488, y:48, width:firstWord.length * 45, height:44, shadow:true})}
 ${outlineText(secondWord, {x:488, y:106, width:secondWord.length * 52.25, height:55, shadow:true})}
 ${outlineText(illumination, {x:488, y:181, width:illumination.length * 80, height:88, shadow:true})}

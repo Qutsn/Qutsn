@@ -9,10 +9,10 @@ Into technology, video games, films, and the ideas behind the things we create.
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/lunar-status-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/lunar-status-light.svg">
-  <img alt="Today's moon phase and illuminated fraction, with its UTC calculation time" src="./assets/lunar-status.svg" width="980">
+  <img alt="Today's moon phase and illuminated fraction, calculated at the latest update" src="./assets/lunar-status.svg" width="980">
 </picture>
 
-<sub>Scheduled every 12 hours · Astronomy Engine · UTC time shown on card</sub>
+<sub>Scheduled every 12 hours · Astronomy Engine · Date in UTC</sub>
 
 
 <!-- The card is a geocentric snapshot, not a location-specific view of the sky.

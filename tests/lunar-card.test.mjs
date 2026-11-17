@@ -30,7 +30,7 @@ test("date labels update including leap days and year boundaries", () => {
   for (const date of ["2028-02-29", "2026-12-31", "2027-01-01"]) {
     const svg = renderSvg(date);
     const [year, month, day] = date.split("-");
-    assert.ok(svg.includes('aria-label="' + day + ' / ' + month + ' ' + year + ' · 00:00 UTC"'));
+    assert.ok(svg.includes('aria-label="' + day + ' / ' + month + ' ' + year + ' · UTC"'));
     assert.ok(svg.includes(date + " at 00:00 UTC"));
   }
   assert.throws(() => renderSvg("2026-11-11", undefined, "missing"), /Unknown theme/);
@@ -85,7 +85,7 @@ test("angled artwork has a clipped curved ring and horizontal date on a transpar
  assert.ok(svg.includes("M0 72L470 0L350 288L0 360Z"));
  assert.ok(svg.includes('fill="#54C8FA" clip-path="url(#angular-edge)"'));
  assert.ok(svg.includes("M0 300C99 324"));
- assert.ok(svg.includes("translate(30.00 300.00)"));
+ assert.ok(svg.includes("translate(30.00 320.00)"));
  assert.doesNotMatch(svg, /rotate\(|<rect[^>]+fill=/);
 });
 
@@ -100,7 +100,7 @@ test("current-day reference and naming after first quarter", () => {
 test("actual instant is used and displayed with a horizontal UTC time",()=>{
  const svg=renderSvg("2026-11-18T12:34:56Z");
  assert.ok(svg.includes("at 12:34 UTC"));
- assert.ok(svg.includes("18 / 11 2026 · 12:34 UTC"));
+ assert.ok(svg.includes("18 / 11 2026 · UTC"));
  assert.doesNotMatch(svg,/rotate\(/);
  assert.throws(()=>parseInstant("2026-02-30T00:00:00Z"));
  assert.throws(()=>parseInstant("2026-11-18T25:00:00Z"));
