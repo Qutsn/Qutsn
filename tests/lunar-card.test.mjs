@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs";
 
 import {
   phaseAt,
+  lunarDiscPath,
+  parseInstant,
   renderSvg,
   utcMidnight,
 } from "../scripts/generate-lunar-card.mjs";
@@ -28,7 +30,7 @@ test("date labels update including leap days and year boundaries", () => {
   for (const date of ["2028-02-29", "2026-12-31", "2027-01-01"]) {
     const svg = renderSvg(date);
     const [year, month, day] = date.split("-");
-    assert.ok(svg.includes('aria-label="' + day + ' / ' + month + ' ' + year + ' · UTC"'));
+    assert.ok(svg.includes('aria-label="' + day + ' / ' + month + ' ' + year + ' · 00:00 UTC"'));
     assert.ok(svg.includes(date + " at 00:00 UTC"));
   }
   assert.throws(() => renderSvg("2026-11-11", undefined, "missing"), /Unknown theme/);
@@ -55,7 +57,7 @@ test("phase model stays within physical bounds", () => {
     const phase = phaseAt(new Date(value));
     assert.ok(phase.fraction >= 0 && phase.fraction < 1);
     assert.ok(phase.illumination >= 0 && phase.illumination <= 1);
-    assert.ok(phase.age >= 0 && phase.age < 29.531);
+    assert.ok(phase.age >= 0 && phase.age < 30);
   }
 });
 
@@ -83,6 +85,34 @@ test("angled artwork has a clipped curved ring and horizontal date on a transpar
  assert.ok(svg.includes("M0 72L470 0L350 288L0 360Z"));
  assert.ok(svg.includes('fill="#54C8FA" clip-path="url(#angular-edge)"'));
  assert.ok(svg.includes("M0 300C99 324"));
- assert.ok(svg.includes("translate(30.00 320.00)"));
+ assert.ok(svg.includes("translate(30.00 300.00)"));
  assert.doesNotMatch(svg, /rotate\(|<rect[^>]+fill=/);
 });
+
+test("current-day reference and naming after first quarter", () => {
+ const p=phaseAt(new Date("2026-11-18T00:00:00Z"));
+ assert.ok(Math.abs(p.illumination - 0.55110723)<0.00001);
+ assert.equal(p.phaseName,"WAXING GIBBOUS");
+ const noon=phaseAt(new Date("2026-11-18T12:00:00Z"));
+ assert.ok(noon.illumination>p.illumination);
+ assert.ok(Math.abs(noon.illumination - .60023783)<.00001);
+});
+test("actual instant is used and displayed with a horizontal UTC time",()=>{
+ const svg=renderSvg("2026-11-18T12:34:56Z");
+ assert.ok(svg.includes("at 12:34 UTC"));
+ assert.ok(svg.includes("18 / 11 2026 · 12:34 UTC"));
+ assert.doesNotMatch(svg,/rotate\(/);
+ assert.throws(()=>parseInstant("2026-02-30T00:00:00Z"));
+ assert.throws(()=>parseInstant("2026-11-18T25:00:00Z"));
+});
+test("moon polygon illuminated area agrees with input fraction, waxing and waning",()=>{
+ for(const phase of [.2,.8])for(const lit of [0,.03,.5,.6,.99,1]){
+  const d=lunarDiscPath(phase,0,0,82,lit);
+  const points=[...d.matchAll(/[ML](-?[\d.]+) (-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);
+  let area=0;
+  points.forEach(([x,y],i)=>{const [nx,ny]=points[(i+1)%points.length];area+=x*ny-nx*y});
+  const measured=Math.abs(area)/2/(Math.PI*82*82);
+  assert.ok(Math.abs(measured-lit)<.003);
+ }
+});
+

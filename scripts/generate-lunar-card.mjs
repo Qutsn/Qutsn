@@ -1,10 +1,8 @@
+import { MoonPhase, Illumination, SearchMoonPhase } from "astronomy-engine";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
-const TAU = Math.PI * 2;
-const DEG = Math.PI / 180;
-const SYNODIC_MONTH = 29.530588853;
 
 const PHASES = [
   "NEW MOON",
@@ -19,60 +17,46 @@ const PHASES = [
 
 const THEMES = { light: true, dark: true };
 
-const mod = (value, base) => ((value % base) + base) % base;
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
+
+// Principal phase labels use a narrow 1-degree window, not a multi-day bin.
 function phaseIndexAt(fraction) {
-  if (fraction < 1 / 32 || fraction >= 31 / 32) return 0;
-  if (fraction < 7 / 32) return 1;
-  if (fraction < 9 / 32) return 2;
-  if (fraction < 15 / 32) return 3;
-  if (fraction < 17 / 32) return 4;
-  if (fraction < 23 / 32) return 5;
-  if (fraction < 25 / 32) return 6;
-  return 7;
-}
-
-export function julianDay(date) {
-  return date.getTime() / 86_400_000 + 2_440_587.5;
+  const angle = fraction * 360;
+  if (angle <= 1 || angle >= 359) return 0;
+  if (Math.abs(angle - 90) <= 1) return 2;
+  if (Math.abs(angle - 180) <= 1) return 4;
+  if (Math.abs(angle - 270) <= 1) return 6;
+  return angle < 90 ? 1 : angle < 180 ? 3 : angle < 270 ? 5 : 7;
 }
 
 export function phaseAt(date) {
   if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
     throw new TypeError("phaseAt requires a valid Date");
   }
+  const fraction = MoonPhase(date) / 360;
+  const illumination = Illumination("Moon", date).phase_fraction;
+  const previousNewMoon = SearchMoonPhase(0, date, -35);
+  if (!previousNewMoon) throw new Error("Could not locate previous new moon");
+  const age = (date.getTime() - previousNewMoon.date.getTime()) / 86400000;
+  const phaseIndex = phaseIndexAt(fraction);
+  return { fraction, illumination, age, phaseIndex, phaseName: PHASES[phaseIndex] };
+}
 
-  const days = julianDay(date) - 2_451_545;
-  const solarAnomaly = (357.5291 + 0.98560028 * days) * DEG;
-  const solarLongitude = solarAnomaly
-    + (1.9148 * Math.sin(solarAnomaly)
-      + 0.02 * Math.sin(2 * solarAnomaly)
-      + 0.0003 * Math.sin(3 * solarAnomaly)
-      + 102.9372
-      + 180) * DEG;
-
-  const lunarMeanLongitude = (218.316 + 13.176396 * days) * DEG;
-  const lunarAnomaly = (134.963 + 13.064993 * days) * DEG;
-  const lunarArgument = (93.272 + 13.22935 * days) * DEG;
-  const lunarLongitude = lunarMeanLongitude + 6.289 * DEG * Math.sin(lunarAnomaly);
-  const lunarLatitude = 5.128 * DEG * Math.sin(lunarArgument);
-
-  const elongation = mod(lunarLongitude - solarLongitude, TAU);
-  const fraction = elongation / TAU;
-  const cosineSeparation = clamp(
-    Math.cos(lunarLatitude) * Math.cos(elongation),
-    -1,
-    1,
-  );
-  const illumination = clamp((1 - cosineSeparation) / 2, 0, 1);
-
-  return {
-    fraction,
-    illumination,
-    age: fraction * SYNODIC_MONTH,
-    phaseIndex: phaseIndexAt(fraction),
-    phaseName: PHASES[phaseIndexAt(fraction)],
-  };
+export function parseInstant(value) {
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) throw new RangeError("Invalid instant");
+    return new Date(value);
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return utcMidnight(value);
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value)) {
+    throw new RangeError("Timestamp must be an ISO UTC instant");
+  }
+  utcMidnight(value.slice(0, 10));
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime()) || date.toISOString().slice(0,19) !== value.slice(0,19)) {
+    throw new RangeError("Invalid instant");
+  }
+  return date;
 }
 
 export function utcMidnight(dateString) {
@@ -106,9 +90,9 @@ function fixed(value) {
   return value.toFixed(2);
 }
 
-function lunarDiscPath(fraction, cx, cy, radius) {
+export function lunarDiscPath(fraction, cx, cy, radius, illumination) {
   const waxing = fraction <= 0.5;
-  const terminator = Math.cos(TAU * fraction);
+  const terminator = 1 - 2 * illumination;
   const samples = 96;
   const outer = [];
   const inner = [];
@@ -158,17 +142,19 @@ function outlineText(text, { x, y, size = 100, width, height, style = "display",
     + '<g fill="' + fill + '">' + geometry + '</g></g>';
 }
 
-export function renderSvg(dateString, data = phaseAt(utcMidnight(dateString)), themeName = "light") {
-  utcMidnight(dateString);
+export function renderSvg(dateString, data = phaseAt(parseInstant(dateString)), themeName = "light") {
+  const instant = parseInstant(dateString);
+  dateString = instant.toISOString().slice(0, 10);
+  const timeLabel = instant.toISOString().slice(11, 16);
   if (!["light", "dark"].includes(themeName)) throw new RangeError("Unknown theme: " + themeName);
   const illumination = Math.round(data.illumination * 100) + "%";
   const [firstWord, secondWord] = data.phaseName.split(" ");
-  const moonPath = lunarDiscPath(data.fraction, 160, 132, 82);
+  const moonPath = lunarDiscPath(data.fraction, 160, 132, 82, data.illumination);
   const [year, month, day] = dateString.split("-");
   // Transparent canvas blends with GitHub; small labels adapt to its theme.
   return `<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360" role="img" aria-labelledby="title desc">
 <title id="title">Current lunar phase: ${attr(data.phaseName)}</title>
-<desc id="desc">${illumination} illuminated on ${dateString} at 00:00 UTC; approximate geocentric model.</desc>
+<desc id="desc">${illumination} illuminated on ${dateString} at ${timeLabel} UTC; geocentric illumination calculated with Astronomy Engine.</desc>
 <defs><clipPath id="angular-edge"><path d="M0 72L470 0L350 288L0 360Z"/></clipPath><clipPath id="frame"><rect width="980" height="360"/></clipPath></defs>
 <g clip-path="url(#frame)">
 
@@ -179,7 +165,7 @@ ${outlineText("LUNAR PHASE", {x:30, y:92, size:14, style:"serif", fill:"#ffffff"
 <circle cx="160" cy="132" r="82" fill="#0750E8"/>
 <path d="${moonPath}" fill="#ffffff"/>
 </g>
-${outlineText(day + " / " + month + " " + year + " · UTC", {x:30, y:320, size:15, style:"serif", fill:"#ffffff"})}
+${outlineText(day + " / " + month + " " + year + " · " + timeLabel + " UTC", {x:30, y:300, size:15, style:"serif", fill:"#ffffff"})}
 ${outlineText(firstWord, {x:488, y:48, width:firstWord.length * 45, height:44, shadow:true})}
 ${outlineText(secondWord, {x:488, y:106, width:secondWord.length * 52.25, height:55, shadow:true})}
 ${outlineText(illumination, {x:488, y:181, width:illumination.length * 80, height:88, shadow:true})}
@@ -191,11 +177,11 @@ ${outlineText("ILLUMINATED", {x:493, y:295, size:15, fill:themeName === "dark" ?
 
 
 function parseArgs(argv) {
-  let dateString = new Date().toISOString().slice(0, 10);
+  let dateString = new Date().toISOString();
   let outputDirectory = "assets";
 
   for (let index = 0; index < argv.length; index += 1) {
-    if (argv[index] === "--date" && argv[index + 1]) {
+    if ((argv[index] === "--date" || argv[index] === "--at") && argv[index + 1]) {
       dateString = argv[index + 1];
       index += 1;
     } else if (argv[index] === "--output-dir" && argv[index + 1]) {
@@ -206,14 +192,14 @@ function parseArgs(argv) {
     }
   }
 
-  utcMidnight(dateString);
+  parseInstant(dateString);
   return { dateString, outputDirectory };
 }
 
 export function main(argv = process.argv.slice(2)) {
   const { dateString, outputDirectory } = parseArgs(argv);
   const destinationDirectory = resolve(outputDirectory);
-  const data = phaseAt(utcMidnight(dateString));
+  const data = phaseAt(parseInstant(dateString));
   mkdirSync(destinationDirectory, { recursive: true });
 
   for (const themeName of Object.keys(THEMES)) {
@@ -226,9 +212,10 @@ export function main(argv = process.argv.slice(2)) {
     renderSvg(dateString, data, "light"),
     "utf8",
   );
-  process.stdout.write("Updated lunar status themes for " + dateString + " at UTC midnight\n");
+  process.stdout.write("Updated lunar status themes for " + dateString + " (UTC snapshot)\n");
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   main();
 }
+
